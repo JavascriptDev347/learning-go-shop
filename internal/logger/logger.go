@@ -1,3 +1,4 @@
+// Package logger provides structured logging functionalities using zerolog.
 package logger
 
 import (
@@ -8,6 +9,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+// New func for logger initialize
 func New() zerolog.Logger {
 	zerolog.TimeFieldFormat = time.RFC3339
 

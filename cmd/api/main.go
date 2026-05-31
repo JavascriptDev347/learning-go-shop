@@ -1,6 +1,9 @@
+// Package main
 package main
 
 import (
+	"database/sql"
+
 	"github.com/JavascriptDev347/learning-go-shop/internal/config"
 	"github.com/JavascriptDev347/learning-go-shop/internal/database"
 	"github.com/gin-gonic/gin"
@@ -18,7 +21,7 @@ func main() {
 	}
 
 	// connect to db
-	db, err := database.New(cfg.Database)
+	db, err := database.New(&cfg.Database)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to connect to database")
 	}
@@ -27,7 +30,12 @@ func main() {
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to get database")
 	}
-	defer mainDb.Close()
+	defer func(mainDb *sql.DB) {
+		err := mainDb.Close()
+		if err != nil {
+			log.Error().Err(err).Msg("Failed to close database connection")
+		}
+	}(mainDb)
 
 	gin.SetMode(cfg.Server.GinMode)
 
