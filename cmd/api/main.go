@@ -61,6 +61,7 @@ func main() {
 		log.Info().Str("port", cfg.Server.Port).Msg("starting http server")
 		if err := httpServer.ListenAndServe(); err != nil && errors.Is(err, http.ErrServerClosed) {
 			log.Fatal().Err(err).Msg("Failed to start server")
+
 		}
 	}()
 
@@ -74,6 +75,7 @@ func main() {
 
 	if err := httpServer.Shutdown(ctx); err != nil {
 		log.Error().Err(err).Msg("failed to shutdown http server")
+		return
 	}
 
 	log.Info().Msg("Shutting down database")
