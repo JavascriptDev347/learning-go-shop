@@ -5,6 +5,7 @@ bin/
 *.dll
 *.so
 *.dylib
+.idea
 
 #Test binary
 *.test
