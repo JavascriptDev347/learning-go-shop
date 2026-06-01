@@ -14,11 +14,11 @@ import (
 type Server struct {
 	config *config.Config
 	db     *gorm.DB
-	logger zerolog.Logger
+	logger *zerolog.Logger
 }
 
 // New func includes cfg, db and logger for the server
-func New(cfg *config.Config, db *gorm.DB, logger zerolog.Logger) *Server {
+func New(cfg *config.Config, db *gorm.DB, logger *zerolog.Logger) *Server {
 	return &Server{
 		config: cfg,
 		db:     db,
