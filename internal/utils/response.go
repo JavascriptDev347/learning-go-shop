@@ -65,13 +65,13 @@ func BadRequestResponse(c *gin.Context, message string, err error) {
 }
 
 // UnauthorizedResponse func belong to ErrorResponse and return with status StatusUnauthorized
-func UnauthorizedResponse(c *gin.Context, message string, err error) {
-	ErrorResponse(c, http.StatusUnauthorized, message, err)
+func UnauthorizedResponse(c *gin.Context, message string) {
+	ErrorResponse(c, http.StatusUnauthorized, message, nil)
 }
 
 // ForbiddenResponse func belong to ErrorResponse and return status with StatusForbidden
-func ForbiddenResponse(c *gin.Context, message string, err error) {
-	ErrorResponse(c, http.StatusForbidden, message, err)
+func ForbiddenResponse(c *gin.Context, message string) {
+	ErrorResponse(c, http.StatusForbidden, message, nil)
 }
 
 // NotFoundResponse func belong to ErrorResponse and return status with StatusNotFound
