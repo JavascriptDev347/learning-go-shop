@@ -61,7 +61,6 @@ func main() {
 		log.Info().Str("port", cfg.Server.Port).Msg("starting http server")
 		if err := httpServer.ListenAndServe(); err != nil && errors.Is(err, http.ErrServerClosed) {
 			log.Fatal().Err(err).Msg("Failed to start server")
-
 		}
 	}()
 
