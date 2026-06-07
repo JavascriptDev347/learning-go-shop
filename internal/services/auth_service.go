@@ -84,7 +84,6 @@ func (s *AuthService) Login(req *dto.LoginRequest) (*dto.AuthResponse, error) {
 }
 
 // RefreshToken function for create new access token with refresh token, and we need it when access token is expired, and we can use refresh token to create new access token without login again.
-
 func (s *AuthService) RefreshToken(req *dto.RefreshTokenRequest) (*dto.AuthResponse, error) {
 	claims, err := utils.ValidateToken(req.RefreshToken, s.config.JWT.Secret)
 	if err != nil {
