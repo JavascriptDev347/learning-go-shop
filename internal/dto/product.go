@@ -11,7 +11,7 @@ type CreateCategoryRequest struct {
 type UpdateCategoryRequest struct {
 	Name        string `json:"name" binding:"required,min=2,max=32"`
 	Description string `json:"description"`
-	IsActive    bool   `json:"is_active"`
+	IsActive    *bool  `json:"is_active"`
 }
 
 // CategoryResponse represents the serialized data schema sent back to clients for a category.
