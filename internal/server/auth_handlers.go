@@ -44,18 +44,18 @@ func (s *Server) login(c *gin.Context) {
 func (s *Server) refreshToken(c *gin.Context) {
 	var req dto.RefreshTokenRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		utils.BadRequestResponse(c, "Invalid request body", err)
+		utils.BadRequestResponse(c, "Invalid request data", err)
 		return
 	}
 
 	authService := services.NewAuthService(s.db, s.config)
 	response, err := authService.RefreshToken(&req)
 	if err != nil {
-		utils.BadRequestResponse(c, "Refresh token failed", err)
+		utils.UnauthorizedResponse(c, "Token refresh failed")
 		return
 	}
 
-	utils.CreatedResponse(c, "Token refreshed", response)
+	utils.SuccessResponse(c, "Token refreshed successfully", response)
 }
 
 func (s *Server) logout(c *gin.Context) {
@@ -65,11 +65,11 @@ func (s *Server) logout(c *gin.Context) {
 		return
 	}
 	authService := services.NewAuthService(s.db, s.config)
-	response, err := authService.RefreshToken(&req)
+	err := authService.Logout(req.RefreshToken)
 	if err != nil {
-		utils.BadRequestResponse(c, "Refresh token failed", err)
+		utils.InternalServerErrorResponse(c, "Logout failed", err)
 		return
 	}
 
-	utils.CreatedResponse(c, "User logged out", response)
+	utils.SuccessResponse(c, "User logged out successfully", nil)
 }
