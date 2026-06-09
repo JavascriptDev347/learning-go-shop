@@ -201,3 +201,7 @@ func (s *ProductService) UpdateProduct(id uint, req *dto.UpdateProductRequest) (
 
 	return s.GetProduct(product.ID)
 }
+
+func (s *ProductService) DeleteProduct(id uint) error {
+	return s.db.Delete(&models.Product{}, id).Error
+}
