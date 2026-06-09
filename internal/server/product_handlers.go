@@ -4,7 +4,6 @@ import (
 	"strconv"
 
 	"github.com/JavascriptDev347/learning-go-shop/internal/dto"
-	"github.com/JavascriptDev347/learning-go-shop/internal/services"
 	"github.com/JavascriptDev347/learning-go-shop/internal/utils"
 	"github.com/gin-gonic/gin"
 )
@@ -16,8 +15,7 @@ func (s *Server) createCategory(c *gin.Context) {
 		return
 	}
 
-	productService := services.NewProductService(s.db)
-	category, err := productService.CreateCategory(req)
+	category, err := s.productService.CreateCategory(req)
 	if err != nil {
 		utils.InternalServerErrorResponse(c, "failed to create category", err)
 		return
@@ -26,8 +24,7 @@ func (s *Server) createCategory(c *gin.Context) {
 }
 
 func (s *Server) getCategories(c *gin.Context) {
-	productService := services.NewProductService(s.db)
-	categories, err := productService.GetCategories()
+	categories, err := s.productService.GetCategories()
 	if err != nil {
 		utils.InternalServerErrorResponse(c, "failed to get categories", err)
 		return
@@ -48,8 +45,7 @@ func (s *Server) updateCategory(c *gin.Context) {
 		return
 	}
 
-	productService := services.NewProductService(s.db)
-	category, err := productService.UpdateCategory(uint(id), &req)
+	category, err := s.productService.UpdateCategory(uint(id), &req)
 	if err != nil {
 		utils.InternalServerErrorResponse(c, "failed to update category", err)
 		return
@@ -65,8 +61,7 @@ func (s *Server) deleteCategory(c *gin.Context) {
 		return
 	}
 
-	productService := services.NewProductService(s.db)
-	err = productService.DeleteCategory(uint(id))
+	err = s.productService.DeleteCategory(uint(id))
 	if err != nil {
 		utils.InternalServerErrorResponse(c, "failed to delete category", err)
 		return
@@ -81,8 +76,7 @@ func (s *Server) createProduct(c *gin.Context) {
 		return
 	}
 
-	productService := services.NewProductService(s.db)
-	product, err := productService.CreateProduct(&req)
+	product, err := s.productService.CreateProduct(&req)
 	if err != nil {
 		utils.InternalServerErrorResponse(c, "failed to create product", err)
 		return
@@ -92,11 +86,10 @@ func (s *Server) createProduct(c *gin.Context) {
 }
 
 func (s *Server) getProducts(c *gin.Context) {
-	productService := services.NewProductService(s.db)
 	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "10"))
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
 
-	products, meta, err := productService.GetProducts(limit, page)
+	products, meta, err := s.productService.GetProducts(limit, page)
 	if err != nil {
 		utils.InternalServerErrorResponse(c, "failed to get products", err)
 		return
@@ -111,8 +104,7 @@ func (s *Server) getProduct(c *gin.Context) {
 		utils.BadRequestResponse(c, "invalid id", err)
 		return
 	}
-	productService := services.NewProductService(s.db)
-	product, err := productService.GetProduct(uint(id))
+	product, err := s.productService.GetProduct(uint(id))
 	if err != nil {
 		utils.InternalServerErrorResponse(c, "failed to get product", err)
 		return
@@ -132,8 +124,7 @@ func (s *Server) updateProduct(c *gin.Context) {
 		utils.BadRequestResponse(c, "invalid request", err)
 	}
 
-	productService := services.NewProductService(s.db)
-	product, err := productService.UpdateProduct(uint(id), &req)
+	product, err := s.productService.UpdateProduct(uint(id), &req)
 	if err != nil {
 		utils.InternalServerErrorResponse(c, "failed to update category", err)
 		return
@@ -147,8 +138,7 @@ func (s *Server) deleteProduct(c *gin.Context) {
 		utils.BadRequestResponse(c, "invalid id", err)
 		return
 	}
-	productService := services.NewProductService(s.db)
-	err = productService.DeleteProduct(uint(id))
+	err = s.productService.DeleteProduct(uint(id))
 	if err != nil {
 		utils.InternalServerErrorResponse(c, "failed to delete category", err)
 		return

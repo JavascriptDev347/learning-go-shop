@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/JavascriptDev347/learning-go-shop/internal/config"
+	"github.com/JavascriptDev347/learning-go-shop/internal/services"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
 	"gorm.io/gorm"
@@ -12,18 +13,32 @@ import (
 
 // Server struct includes config, db and logger for the server
 type Server struct {
-	config *config.Config
-	db     *gorm.DB
-	logger *zerolog.Logger
+	config         *config.Config
+	db             *gorm.DB
+	logger         *zerolog.Logger
+	authService    *services.AuthService
+	productService *services.ProductService
+	userService    *services.UserService
 }
 
 // New func includes cfg, db and logger for the server
-func New(cfg *config.Config, db *gorm.DB, logger *zerolog.Logger) *Server {
+func New(cfg *config.Config,
+	db *gorm.DB,
+	logger *zerolog.Logger,
+	authService *services.AuthService,
+	productService *services.ProductService,
+	userService *services.UserService,
+
+) *Server {
 	return &Server{
-		config: cfg,
-		db:     db,
-		logger: logger,
+		config:         cfg,
+		db:             db,
+		logger:         logger,
+		authService:    authService,
+		productService: productService,
+		userService:    userService,
 	}
+
 }
 
 // SetupRoutes func belongs to server and includes router setup such as gin Logger, gin Recovery (for panic) and custom corsMiddleware. It also includes a health check route for testing the server status.

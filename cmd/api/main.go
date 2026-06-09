@@ -15,6 +15,7 @@ import (
 	"github.com/JavascriptDev347/learning-go-shop/internal/config"
 	"github.com/JavascriptDev347/learning-go-shop/internal/database"
 	"github.com/JavascriptDev347/learning-go-shop/internal/server"
+	"github.com/JavascriptDev347/learning-go-shop/internal/services"
 	"github.com/gin-gonic/gin"
 
 	"github.com/JavascriptDev347/learning-go-shop/internal/logger"
@@ -48,7 +49,12 @@ func main() {
 
 	gin.SetMode(cfg.Server.GinMode)
 
-	srv := server.New(cfg, db, &log)
+	// services
+	authService := services.NewAuthService(db, cfg)
+	productService := services.NewProductService(db)
+	userService := services.NewUserService(db)
+
+	srv := server.New(cfg, db, &log, authService, productService, userService)
 	router := srv.SetupRoutes()
 
 	httpServer := http.Server{
