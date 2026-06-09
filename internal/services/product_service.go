@@ -7,10 +7,12 @@ import (
 	"gorm.io/gorm"
 )
 
+// ProductService struct for product
 type ProductService struct {
 	db *gorm.DB
 }
 
+// NewProductService is constructor for ProductService and if this not available ypu can not use this ProductService inside another file
 func NewProductService(db *gorm.DB) *ProductService {
 	return &ProductService{
 		db: db,
@@ -36,6 +38,7 @@ func (s *ProductService) CreateCategory(req dto.CreateCategoryRequest) (*dto.Cat
 	}, nil
 }
 
+// GetCategories return all categories
 func (s *ProductService) GetCategories() ([]dto.CategoryResponse, error) {
 	var categories []models.Category
 	if err := s.db.Where("is_active = ?", true).Find(&categories).Error; err != nil {
@@ -55,6 +58,7 @@ func (s *ProductService) GetCategories() ([]dto.CategoryResponse, error) {
 	return response, nil
 }
 
+// UpdateCategory for update category
 func (s *ProductService) UpdateCategory(id uint, req *dto.UpdateCategoryRequest) (*dto.ProductResponse, error) {
 
 	var category models.Category
@@ -80,10 +84,12 @@ func (s *ProductService) UpdateCategory(id uint, req *dto.UpdateCategoryRequest)
 	}, nil
 }
 
+// DeleteCategory for  delete category by id and this will not delete the category, but it will set is_active to false
 func (s *ProductService) DeleteCategory(id uint) error {
 	return s.db.Delete(&models.Category{}, id).Error
 }
 
+// CreateProduct for create product
 func (s *ProductService) CreateProduct(req *dto.CreateProductRequest) (*dto.ProductResponse, error) {
 
 	product := models.Product{
@@ -103,6 +109,7 @@ func (s *ProductService) CreateProduct(req *dto.CreateProductRequest) (*dto.Prod
 
 }
 
+// GetProducts for get all products with pagination and this will return a list of products and pagination meta data such as total, page, limit and total pages
 func (s *ProductService) GetProducts(limit, page int) ([]dto.ProductResponse, *utils.PaginationMeta, error) {
 	if page < 1 {
 		page = 1
@@ -142,6 +149,7 @@ func (s *ProductService) GetProducts(limit, page int) ([]dto.ProductResponse, *u
 	return response, meta, nil
 }
 
+// GetProduct for get one product
 func (s *ProductService) GetProduct(id uint) (*dto.ProductResponse, error) {
 	var product models.Product
 	if err := s.db.Preload("Category").Preload("Images").
@@ -151,6 +159,33 @@ func (s *ProductService) GetProduct(id uint) (*dto.ProductResponse, error) {
 	return new(s.convertToProductResponse(&product)), nil
 }
 
+// UpdateProduct for update product
+func (s *ProductService) UpdateProduct(id uint, req *dto.UpdateProductRequest) (*dto.ProductResponse, error) {
+	var product models.Product
+	if err := s.db.First(&product, id).Error; err != nil {
+		return nil, err
+	}
+	product.CategoryID = req.CategoryID
+	product.Name = req.Name
+	product.Description = req.Description
+	product.Price = req.Price
+	product.Stock = req.Stock
+	if req.IsActive != nil {
+		product.IsActive = *req.IsActive
+	}
+	if err := s.db.Save(&product).Error; err != nil {
+		return nil, err
+	}
+
+	return s.GetProduct(product.ID)
+}
+
+// DeleteProduct for delete product
+func (s *ProductService) DeleteProduct(id uint) error {
+	return s.db.Delete(&models.Product{}, id).Error
+}
+
+// converToProductResponse this is private function ant it helps return product easily
 func (s *ProductService) convertToProductResponse(product *models.Product) dto.ProductResponse {
 
 	images := make([]dto.ProductImagesResponse, len(product.Images))
@@ -180,28 +215,4 @@ func (s *ProductService) convertToProductResponse(product *models.Product) dto.P
 		},
 		Images: images,
 	}
-}
-
-func (s *ProductService) UpdateProduct(id uint, req *dto.UpdateProductRequest) (*dto.ProductResponse, error) {
-	var product models.Product
-	if err := s.db.First(&product, id).Error; err != nil {
-		return nil, err
-	}
-	product.CategoryID = req.CategoryID
-	product.Name = req.Name
-	product.Description = req.Description
-	product.Price = req.Price
-	product.Stock = req.Stock
-	if req.IsActive != nil {
-		product.IsActive = *req.IsActive
-	}
-	if err := s.db.Save(&product).Error; err != nil {
-		return nil, err
-	}
-
-	return s.GetProduct(product.ID)
-}
-
-func (s *ProductService) DeleteProduct(id uint) error {
-	return s.db.Delete(&models.Product{}, id).Error
 }
