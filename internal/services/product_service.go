@@ -185,6 +185,23 @@ func (s *ProductService) DeleteProduct(id uint) error {
 	return s.db.Delete(&models.Product{}, id).Error
 }
 
+// AddProductImage for add image to product
+func (s *ProductService) AddProductImage(productID uint, url, altText string) error {
+
+	var count int64
+
+	s.db.Model(&models.ProductImage{}).Where("product_id = ?", productID).Count(&count)
+
+	image := models.ProductImage{
+		ProductID: productID,
+		URL:       url,
+		AltText:   altText,
+		IsPrimary: count == 0, // Set as primary if it's the first image}
+	}
+
+	return s.db.Create(&image).Error
+}
+
 // converToProductResponse this is private function ant it helps return product easily
 func (s *ProductService) convertToProductResponse(product *models.Product) dto.ProductResponse {
 
