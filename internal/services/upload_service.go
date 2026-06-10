@@ -9,17 +9,17 @@ import (
 	"github.com/JavascriptDev347/learning-go-shop/internal/interfaces"
 )
 
-type LocalUploadService struct {
+type UploadService struct {
 	provider interfaces.UploadProvider
 }
 
-func NewLocalUploadService(provider interfaces.UploadProvider) *LocalUploadService {
-	return &LocalUploadService{
+func NewUploadService(provider interfaces.UploadProvider) *UploadService {
+	return &UploadService{
 		provider: provider,
 	}
 }
 
-func (s *LocalUploadService) UploadProductImage(productID uint, file *multipart.FileHeader) (string, error) {
+func (s *UploadService) UploadProductImage(productID uint, file *multipart.FileHeader) (string, error) {
 	ext := strings.ToLower(path.Ext(file.Filename))
 	if !isValidImageExt(ext) {
 		return "", fmt.Errorf("invalid file extension: %s", ext)

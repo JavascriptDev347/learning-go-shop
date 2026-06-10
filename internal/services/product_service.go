@@ -109,7 +109,7 @@ func (s *ProductService) CreateProduct(req *dto.CreateProductRequest) (*dto.Prod
 
 }
 
-// GetProducts for get all products with pagination and this will return a list of products and pagination meta data such as total, page, limit and total pages
+// GetProducts for get all products with pagination and this will return a list of products and pagination , meta data such as total, page, limit and total pages
 func (s *ProductService) GetProducts(limit, page int) ([]dto.ProductResponse, *utils.PaginationMeta, error) {
 	if page < 1 {
 		page = 1
