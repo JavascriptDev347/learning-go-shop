@@ -39,7 +39,7 @@ migrate-down:
 	migrate -path db/migrations -database "postgres://postgres:postgres@localhost:5432/go_ecommerce_shop?sslmode=disable" down
 
 docker-up:
-	docker compose -f docker/docker-compose.yml up -d
+	docker compose -f docker/docker-compose.yml up
 docker-down:
-	docker compose -f docker/docker-compose.yml down -d
+	docker compose -f docker/docker-compose.yml down
 

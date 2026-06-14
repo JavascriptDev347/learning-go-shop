@@ -23,11 +23,12 @@ services:
       - AWS_ACCESS_KEY_ID=test
       - AWS_SECRET_ACCESS_KEY=test
       - DATA_DIR=/tmp/localstack/data
+      - LOCALSTACK_AUTH_TOKEN=ls-WelE4748-PisE-PIki-7780-toxiJeGU775f
     ports:
       - "4566:4566"
     volumes:
       - localstack_data:/var/lib/localstack
-
+      - ./init/aws/init-localstack.sh:/etc/localstack/init/ready.d/init.sh
 volumes:
   postgres_data:
   localstack_data:
