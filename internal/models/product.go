@@ -27,7 +27,7 @@ type Product struct {
 	Name        string         `json:"name" gorm:"not null"`
 	Description string         `json:"description"`
 	Price       float64        `json:"price" gorm:"not null"`
-	Stock       uint           `json:"stock" gorm:"default:0"`
+	Stock       int            `json:"stock" gorm:"default:0"`
 	SKU         string         `json:"sku" gorm:"uniqueIndex;not null"`
 	IsActive    bool           `json:"is_active" gorm:"default:true"`
 	CreatedAt   time.Time      `json:"created_at"`

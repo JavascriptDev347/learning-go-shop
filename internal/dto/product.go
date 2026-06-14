@@ -28,7 +28,7 @@ type CreateProductRequest struct {
 	Name        string  `json:"name" binding:"required,min=2,max=32"`
 	Description string  `json:"description"`
 	Price       float64 `json:"price" binding:"required,gt=0"`
-	Stock       uint    `json:"stock" binding:"min=0"`
+	Stock       int     `json:"stock" binding:"min=0"`
 	SKU         string  `json:"sku" binding:"required"`
 }
 
@@ -38,7 +38,7 @@ type UpdateProductRequest struct {
 	Name        string  `json:"name" binding:"required,min=2,max=32"`
 	Description string  `json:"description"`
 	Price       float64 `json:"price" binding:"required,gt=0"`
-	Stock       uint    `json:"stock" binding:"min=0"`
+	Stock       int     `json:"stock" binding:"min=0"`
 	IsActive    *bool   `json:"is_active"`
 }
 
@@ -49,7 +49,7 @@ type ProductResponse struct {
 	Name        string                  `json:"name"`
 	Description string                  `json:"description"`
 	Price       float64                 `json:"price"`
-	Stock       uint                    `json:"stock"`
+	Stock       int                     `json:"stock"`
 	SKU         string                  `json:"sku"`
 	IsActive    bool                    `json:"is_active"`
 	Category    CategoryResponse        `json:"category"`
